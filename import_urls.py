@@ -9,6 +9,7 @@ def get_url_set(listhost):
     hosts_list = hosts.split()
     return set(hosts_list)
 
+
 def get_urls_from_host(zapi, hostid):
     urls =  set()
     web_scenarios = zapi.httptest.get(selectSteps = 'extend', hostids = hostid)
@@ -85,15 +86,12 @@ def disable_urls_on_host(zapi, urls, hostid, hostname):
             print(ex)
 
 
-
-
 def get_hosts_name_id(zapi, groupid = config.zabbix_group_id):
     result = {}
     hosts = zapi.host.get(output = 'extend', grpupids = groupid)
     for h in hosts:
         result[h['name']] = h['hostid']
     return result
-
 
 
 zapi = ZabbixAPI(config.zabbix_api_url)
@@ -110,4 +108,3 @@ for h in hosts:
     current_urls = get_urls_from_host(zapi, hosts[h])
     add_urls_to_host(zapi, urls - current_urls, hosts[h], h)
     disable_urls_on_host(zapi, current_urls - urls, hosts[h], h)
-
